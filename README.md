@@ -1,4 +1,4 @@
-AjaxGithub
+AjaxTVschedules
 ==========
 
-first codebar ajax tutorial
+second codebar ajax tutorial
