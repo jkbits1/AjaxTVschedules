@@ -1,5 +1,93 @@
 // TV Schedule example
 
+
+
+function retrieveGenres(){
+
+    var url = "http://www.bbc.co.uk/tv/programmes/genres.json";
+
+    $.ajax({
+
+//        type: 'GET',
+
+        url: url
+
+//        ,
+
+//        dataType: 'json',
+//
+//        xhrFields: {
+//            withCredentials: true
+//        },
+//
+//        crossDomain: true   ,
+//
+////        beforeSend: setHeader
+//
+//        beforeSend: function(xhr){
+//            xhr.withCredentials = true;
+//        }
+
+    }).done(function(data){
+
+        var i = 0;
+
+        $.each(data.categories, function(i, val){
+
+            var x = 0;
+
+            console.log("Title: " + this.title);
+
+            console.log("Key: " + this.key);
+
+            // either line below works - my pref is for the second line, but I'm not sure if this is most efficient.
+//            $("#genres").append("<li>" + val.title + "</li>");
+            $("#genres").append($("<li>").attr("id", this.key).text(val.title));
+
+        });
+
+    }).fail(function(){
+
+        var k = 0;
+
+
+    }).always(function() {
+
+
+    });
+
+}
+
+function retrieveScheduleByGenre(genre){
+
+    var url = "http://www.bbc.co.uk/tv/programmes/genres/" + genre + "/schedules/tomorrow.json";
+
+    $.ajax({
+
+//        dataType: 'json',
+
+//        type: 'GET',
+
+        url: url
+    }).done(function(data){
+
+        var i = 0;
+
+    }).fail(function(){
+
+        var k = 0;
+
+    });
+
+
+
+}
+
+function setHeader(xhr) {
+
+    xhr.setRequestHeader('Authorization', token);
+}
+
 function formatDate(start, end) {
   start_date = new Date(start);
   end_date = new Date(end);
