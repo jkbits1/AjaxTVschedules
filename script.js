@@ -10,6 +10,11 @@ $(document).ready(function(){
 
         $(this).addClass("active");
 
+        $progs = $("#programmes");
+
+        $progs.empty();
+
+        $progs.append("<div class='spinner'><img src='spinner.gif' /></div>");
 
         if (getTomorrowsSchedule !== undefined) {
 
@@ -135,6 +140,8 @@ function //retrieveScheduleByGenre
         url: url
     }).done(function(data){
 
+        $progs.find(".spinner").remove();
+
         $.each(data.broadcasts, function(i, item){
 
             var li_html =
@@ -146,16 +153,11 @@ function //retrieveScheduleByGenre
 
         });
 
-        var i = 0;
-
     }).fail(function(){
 
         var k = 0;
 
     });
-
-
-
 }
 
 function setHeader(xhr) {
