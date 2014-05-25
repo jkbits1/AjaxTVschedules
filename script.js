@@ -1,6 +1,9 @@
 // TV Schedule example
 
+$(document).ready(function(){
 
+    retrieveGenres();
+});
 
 function retrieveGenres(){
 
@@ -70,6 +73,20 @@ function retrieveScheduleByGenre(genre){
 
         url: url
     }).done(function(data){
+
+        $.each(data.broadcasts, function(i, item){
+
+            item.programme.display_titles.title
+            item.programme.short_synopsis
+            item.programme.image/
+            item.programme.image.pid
+
+            item.start
+            item.end
+            item.duration
+            item.service.title
+
+        });
 
         var i = 0;
 
