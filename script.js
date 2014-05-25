@@ -2,7 +2,31 @@
 
 $(document).ready(function(){
 
+    //        var t = $("#genres li");
+
+    $(document).on('click', "#genres li", function() {
+
+        $("#genres li").removeClass("active");
+
+        $(this).addClass("active");
+
+
+        if (getTomorrowsSchedule !== undefined) {
+
+
+            getTomorrowsSchedule(
+//                $(this).attr("id")
+                this.id
+            );
+
+
+        }
+    });
+
+
     retrieveGenres();
+
+
 });
 
 function retrieveGenres(){
@@ -49,7 +73,9 @@ function retrieveGenres(){
 
         });
 
-    }).fail(function(){
+
+
+        }).fail(function(){
 
         var k = 0;
 
@@ -61,7 +87,42 @@ function retrieveGenres(){
 
 }
 
-function retrieveScheduleByGenre(genre){
+function processEpisode(episode) {
+
+    var item_html = "<li>";
+
+    item_html += "<h2>" + episode.programme.display_titles.title + "</h2>";
+
+
+    if (episode.programme.image) {
+    item_html += "<img src=" +
+        //episode.programme.image +
+        "http://ichef.bbci.co.uk/images/ic/272x153/" +
+        episode.programme.image.pid + ".jpg />";
+}
+
+    item_html += "<br />";
+
+    item_html += episode.programme.short_synopsis;
+    item_html += "<br />";
+
+    item_html += episode.start;
+    item_html += "<br />";
+    item_html += episode.end;
+    item_html += "<br />";
+    item_html += episode.duration / 60 + " mins";
+    item_html += "<br />";
+    item_html += episode.service.title;
+    item_html += "<br />";
+
+    item_html += "</li>";
+
+    return item_html;
+
+}
+
+function //retrieveScheduleByGenre
+    getTomorrowsSchedule(genre){
 
     var url = "http://www.bbc.co.uk/tv/programmes/genres/" + genre + "/schedules/tomorrow.json";
 
@@ -76,15 +137,12 @@ function retrieveScheduleByGenre(genre){
 
         $.each(data.broadcasts, function(i, item){
 
-            item.programme.display_titles.title
-            item.programme.short_synopsis
-            item.programme.image/
-            item.programme.image.pid
+            var li_html =
+            processEpisode(item);
 
-            item.start
-            item.end
-            item.duration
-            item.service.title
+
+                $("#programmes").append(li_html);
+
 
         });
 
