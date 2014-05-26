@@ -10,9 +10,7 @@ $(document).ready(function(){
 
         $(this).addClass("active");
 
-        $progs = $("#programmes");
-
-        $progs.empty();
+        $progs = clearProgrammes();
 
         $progs.append("<div class='spinner'><img src='spinner.gif' /></div>");
 
@@ -28,11 +26,28 @@ $(document).ready(function(){
         }
     });
 
+    $(document).on('click', "#programmes > li > .view-more", function(){
+
+        clearProgrammes();
+
+        getUpcomingEpisodes(this.id);
+
+    });
+
 
     retrieveGenres();
 
 
 });
+
+function clearProgrammes(){
+
+    $progs = $("#programmes");
+
+    $progs.empty();
+
+    return $progs;
+}
 
 function retrieveGenres(){
 
@@ -100,11 +115,11 @@ function processEpisode(episode) {
 
 
     if (episode.programme.image) {
-    item_html += "<img src=" +
-        //episode.programme.image +
-        "http://ichef.bbci.co.uk/images/ic/272x153/" +
-        episode.programme.image.pid + ".jpg />";
-}
+        item_html += "<img src=" +
+            //episode.programme.image +
+            "http://ichef.bbci.co.uk/images/ic/272x153/" +
+            episode.programme.image.pid + ".jpg />";
+    }
 
     item_html += "<br />";
 
@@ -120,6 +135,17 @@ function processEpisode(episode) {
 
     item_html += "<br />";
     item_html += episode.duration / 60 + " mins";
+    item_html += "<br />";
+
+
+    if (episode.programme.position) {
+
+        item_html += "<a class='view-more' id='" + episode.programme.programme.pid + "' href='#'>View more upcoming " + episode.programme.display_titles.title + "</a>"
+    }
+//    else {
+//        var x = 0;
+//    }
+
     item_html += "<br />";
     item_html += "<span class='service'>" + episode.service.title + "</span>";
     item_html += "<br />";
@@ -146,20 +172,43 @@ function //retrieveScheduleByGenre
 
         $progs.find(".spinner").remove();
 
-        $.each(data.broadcasts, function(i, item){
-
-            var li_html =
-            processEpisode(item);
-
-
-                $("#programmes").append(li_html);
-
-
-        });
+        addProgrammesToList(data.broadcasts);
 
     }).fail(function(){
 
         var k = 0;
+
+    });
+}
+
+function addProgrammesToList(broadcasts){
+
+    $.each(broadcasts, function(i, item){
+
+        var li_html =
+            processEpisode(item);
+
+
+        $("#programmes").append(li_html);
+
+
+    });
+}
+
+function getUpcomingEpisodes(pid){
+
+    var url = "http://www.bbc.co.uk/programmes/" + pid + "/episodes/upcoming.json";
+
+    $.ajax({ url: url
+
+
+    }).done(function(data){
+
+        //processEpisode(data);
+
+        addProgrammesToList(data.broadcasts);
+
+//        var i = 0;
 
     });
 }
